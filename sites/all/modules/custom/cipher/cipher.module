@@ -56,9 +56,56 @@
 //creates cipher on submit
     function cipher_form_submit($form, &$form_state) {
         //transform form inputs into variables we can work with
-        $_SESSION ['message'] = $form_state['values']['message'];
-        $_SESSION ['direction'] = $form_state['values']['direction'];
-        $_SESSION ['shift'] = $form_state['values']['shift'];
+            $message = $form_state['values']['message'];
+            $direction = $form_state['values']['direction'];
+            $shift = $form_state['values']['shift'];
+
+        //logic variables
+            $alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+            $cipher = '';
+
+        //logic
+            // determines if we are ciphering to the left or right, making the value of $shift either positive (moving right) or negative (moving left)
+            if ($direction = 'left'){
+                $shift_modifier = 1;
+            } else {
+                $shift_modifier = -1;
+            };
+
+            //lowercase message, split message into individual letters
+            $lower_message = strtolower($message);
+            $letters =  str_split($lower_message);
+
+            //go through each letter in the letters array
+            foreach ($letters as $letter) {
+
+                //if the letter is in array...
+                if (in_array($letter, $alphabet)) {
+
+                    //find the index
+                    $index = array_search($letter, $alphabet);
+
+                    //shift the index by the shift amount
+                    $shifted_index = ($index + ($shift*$shift_modifier));
+
+                        //if the new idex goes beyond the scope of the array, find the equivlent that would return the same letter
+                        if ($shifted_index < 0) {
+                            $shifted_index += 26;
+                        } elseif ($shifted_index > 25) {
+                            $shifted_index -= 26;
+                        }
+
+                        // $final_index = ($shifted_index*-1);
+                        // var_dump($shifted_index);
+
+                    $cipher .= $alphabet[$shifted_index];
+                } else {
+                    $cipher .=$letter;
+                };
+            };
+
+        //store result of logic into session variable
+        $_SESSION['result'] = $cipher;
 
         //redirect to result page once logic is complete
         $form_state['redirect'] = 'cipher_result_page';
@@ -66,62 +113,12 @@
 
 //result page
     function cipher_result() {
-        $message = $_SESSION['message'];
-        $direction = $_SESSION['direction'];
-        $shift = $_SESSION['shift'];
+        $cipher = $_SESSION['result'];
 
-        //logic variables
-        $alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
-        $cipher = '';
-
-        //logic
-
-        // determines if we are ciphering to the left or right, making the value of $shift either positive (moving right) or negative (moving left)
-        if ($direction = 'left'){
-            $shift_modifier = 1;
-        } else {
-            $shift_modifier = -1;
-        };
-
-        //lowercase message, split message into individual letters
-        $lower_message = strtolower($message);
-        $letters =  str_split($lower_message);
-
-        //go through each letter in the letters array
-        foreach ($letters as $letter) {
-
-            //if the letter is in array...
-            if (in_array($letter, $alphabet)) {
-
-                //find the index
-                $index = array_search($letter, $alphabet);
-
-                //shift the index by the shift amount
-                $shifted_index = ($index + ($shift*$shift_modifier));
-
-                    //if the new idex goes beyond the scope of the array, find the equivlent that would return the same letter
-                    if ($shifted_index < 0) {
-                        $shifted_index += 26;
-                    } elseif ($shifted_index > 25) {
-                        $shifted_index -= 26;
-                    }
-
-                    // $final_index = ($shifted_index*-1);
-                    // var_dump($shifted_index);
-
-                $cipher .= $alphabet[$shifted_index];
-            } else {
-                $cipher .=$letter;
-            };
-        };
-
-        //store result of logic into session variable
-        // $_SESSION['result'] = $result;
-
-        //$_SESSION['result'];
-
-        return $cipher;
+        return " \" $cipher \" ";
     }
+
+
 
 //custom validations
     function element_validate_value($element) {
