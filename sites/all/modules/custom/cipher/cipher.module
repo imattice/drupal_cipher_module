@@ -35,7 +35,7 @@
             '#type' => 'textfield',
             '#description' => 'Which direction would you like to encode? (left or right)',
             // '#element_validate' => [''],
-            '#required' => TRUE,
+            // '#required' => TRUE,
         ];
 
         $form['shift'] = [
@@ -43,7 +43,7 @@
             '#type' => 'textfield',
             '#description' => 'How much would you like your message to shift?',
             // '#element_validate' => [''],
-            '#required' => TRUE,
+            // '#required' => TRUE,
         ];
 
         $form['submit'] = [
@@ -55,17 +55,10 @@
 
 //creates cipher on submit
     function cipher_form_submit($form, &$form_state) {
-        //transform inputs into variables we can work with
-        $message = $form_state['values']['message'];
-        $direction = $form_state['values']['direction'];
-        $shift = $form_state['values']['shift'];
-
-        //logic
-        $result = $message;
-
-        //store result of logic into session variable
-        $_SESSION['result'] = $result;
-
+        //transform form inputs into variables we can work with
+        $_SESSION ['message'] = $form_state['values']['message'];
+        $_SESSION ['direction'] = $form_state['values']['direction'];
+        $_SESSION ['shift'] = $form_state['values']['shift'];
 
         //redirect to result page once logic is complete
         $form_state['redirect'] = 'cipher_result_page';
@@ -73,7 +66,43 @@
 
 //result page
     function cipher_result() {
-        $result = $_SESSION['result'];
+        $message = $_SESSION['message'];
+        $direction = $_SESSION['direction'];
+        $shift = $_SESSION['shift'];
 
-        return $result;
+        //logic variables
+        $alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+        $size = count($alphabet);
+        $cipher = [];
+
+        //logic
+
+        //split message into individual letters
+        $letters =  str_split($message);
+
+        //go through each letter in the letters array
+        foreach ($letters as $letter) {
+
+            //if the letter is in array...
+            if (in_array($letter, $alphabet)) {
+
+                //find the index
+                $index = array_search($letter, $alphabet);
+
+                //shift the index by the shift amount
+                $shifted_index = ($index + $shift);
+                
+                array_push($cipher, $alphabet[$shifted_index]);
+            };
+        };
+
+        //combine all letters back into a word
+        $result = implode($cipher);
+
+        //store result of logic into session variable
+        // $_SESSION['result'] = $result;
+
+        // $_SESSION['result'];
+
+        return " \" $result \" ";
     }
