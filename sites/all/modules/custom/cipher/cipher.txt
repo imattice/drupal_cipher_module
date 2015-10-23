@@ -1,0 +1,35 @@
+- Returns the letters in the original message
+  Input: a
+  Input: 0
+  Input: right
+  Output: a
+
+- Shifts the letter to the next letter in the alphabet
+  Input: a
+  Input: 1
+  Input: right
+  Output: b
+
+- Can move left
+  Input: b
+  Input: 1
+  Input: left
+  Output: a
+
+- Circles back if reaches end of alphabet
+  Input: z
+  Input: 2
+  Input: right
+  Output: b
+
+- Handles full words
+    Input: hello
+    Input: 1
+    Input: right
+    Output: ifmmp
+
+- Ignores spaces and punctuation
+  Input: Hey you!
+  Input: 1
+  Input: right
+  Output: ifz zpv!

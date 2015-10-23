@@ -1,0 +1,79 @@
+<?php
+
+//routing
+    function cipher_menu() {
+        $items['cipher'] = [
+            'title' => 'Shift Cipher',
+            'page callback' =>'drupal_get_form',
+            'page arguments' => ['cipher_form'],
+            'access callback' => TRUE,
+            'type' => MENU_NORMAL_ITEM,
+        ];
+
+        $items['cipher_result_page'] = [
+            'title' => 'Secret Message',
+            'page callback' => 'cipher_result',
+            'access callback' => TRUE,
+            'type' => MENU_CALLBACK,
+        ];
+
+        return $items;
+    }
+
+//form
+    function cipher_form() {
+        $form['message'] = [
+            '#title' => 'Message',
+            '#type' => 'textfield',
+            '#description' => 'Enter your secret message.',
+            // '#element_validate' => [''],
+            '#required' => TRUE,
+        ];
+
+        $form['direction'] = [
+            '#title' => 'Direction',
+            '#type' => 'textfield',
+            '#description' => 'Which direction would you like to encode? (left or right)',
+            // '#element_validate' => [''],
+            '#required' => TRUE,
+        ];
+
+        $form['shift'] = [
+            '#title' => 'Shift',
+            '#type' => 'textfield',
+            '#description' => 'How much would you like your message to shift?',
+            // '#element_validate' => [''],
+            '#required' => TRUE,
+        ];
+
+        $form['submit'] = [
+            '#type' => 'submit',
+            '#value' => 'Shhh!',
+        ];
+        return $form;
+    }
+
+//creates cipher on submit
+    function cipher_form_submit($form, &$form_state) {
+        //transform inputs into variables we can work with
+        $message = $form_state['values']['message'];
+        $direction = $form_state['values']['direction'];
+        $shift = $form_state['values']['shift'];
+
+        //logic
+        $result = $message;
+
+        //store result of logic into session variable
+        $_SESSION['result'] = $result;
+
+
+        //redirect to result page once logic is complete
+        $form_state['redirect'] = 'cipher_result_page';
+    }
+
+//result page
+    function cipher_result() {
+        $result = $_SESSION['result'];
+
+        return $result;
+    }

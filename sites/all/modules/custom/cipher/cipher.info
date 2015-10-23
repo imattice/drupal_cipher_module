@@ -1,0 +1,5 @@
+name = ShiftCipher
+description = Allows user to encript a message using a shift cipher
+package = Practice Modules
+core = 7.x
+files [] = cipher.module
