@@ -35,7 +35,7 @@
             '#type' => 'textfield',
             '#description' => 'Which direction would you like to encode? (left or right)',
             // '#element_validate' => [''],
-            // '#required' => TRUE,
+            '#required' => TRUE,
         ];
 
         $form['shift'] = [
@@ -43,7 +43,7 @@
             '#type' => 'textfield',
             '#description' => 'How much would you like your message to shift?',
             // '#element_validate' => [''],
-            // '#required' => TRUE,
+            '#required' => TRUE,
         ];
 
         $form['submit'] = [
@@ -73,10 +73,11 @@
         //logic variables
         $alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
         $size = count($alphabet);
-        $cipher = [];
+        $cipher = '';
 
         //logic
 
+        // determines if we are ciphering to the left or right, making the value of $shift either positive (moving right) or negative (moving left)
         if ($direction = 'left'){
             $shift_modifier = -1;
         } else {
@@ -96,21 +97,27 @@
                 $index = array_search($letter, $alphabet);
 
                 //shift the index by the shift amount
-                $shifted_index = ($index + ($shift
-                *$shift_modifier
-                ));
+                $shifted_index = ($index + ($shift*$shift_modifier));
 
-                array_push($cipher, $alphabet[$shifted_index]);
-            };
+                    if ($shifted_index < 0) {
+                        $shifted_index += 26;
+                    } elseif ($shifted_index > 25) {
+                        $shifted_index -= 26;
+                    }
+
+                    $final_index = ($shifted_index*-1);
+                    // var_dump($shifted_index);
+
+                $cipher .= $alphabet[$final_index]);
+            } else {
+                $cipher .=$letter;
+            }
         };
-
-        //combine all letters back into a word
-        $result = implode($cipher);
 
         //store result of logic into session variable
         // $_SESSION['result'] = $result;
 
         // $_SESSION['result'];
 
-        return " \" $result \" ";
+        return " \" $cipher \" ";
     }

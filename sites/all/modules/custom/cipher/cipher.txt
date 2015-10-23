@@ -10,7 +10,7 @@ x Shifts the letter to the next letter in the alphabet
   Input: right
   Output: b
 
-- Can move left
+x Can move left
   Input: b
   Input: 1
   Input: left
