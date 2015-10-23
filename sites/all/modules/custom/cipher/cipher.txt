@@ -1,10 +1,10 @@
-- Returns the letters in the original message
+x Returns the letters in the original message
   Input: a
   Input: 0
   Input: right
   Output: a
 
-- Shifts the letter to the next letter in the alphabet
+x Shifts the letter to the next letter in the alphabet
   Input: a
   Input: 1
   Input: right

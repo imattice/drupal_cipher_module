@@ -77,6 +77,12 @@
 
         //logic
 
+        if ($direction = 'left'){
+            $shift_modifier = -1;
+        } else {
+            $shift_modifier = 1;
+        };
+
         //split message into individual letters
         $letters =  str_split($message);
 
@@ -90,8 +96,10 @@
                 $index = array_search($letter, $alphabet);
 
                 //shift the index by the shift amount
-                $shifted_index = ($index + $shift);
-                
+                $shifted_index = ($index + ($shift
+                *$shift_modifier
+                ));
+
                 array_push($cipher, $alphabet[$shifted_index]);
             };
         };
