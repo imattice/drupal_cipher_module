@@ -79,9 +79,9 @@
 
         // determines if we are ciphering to the left or right, making the value of $shift either positive (moving right) or negative (moving left)
         if ($direction = 'left'){
-            $shift_modifier = -1;
-        } else {
             $shift_modifier = 1;
+        } else {
+            $shift_modifier = -1;
         };
 
         //split message into individual letters
@@ -99,19 +99,20 @@
                 //shift the index by the shift amount
                 $shifted_index = ($index + ($shift*$shift_modifier));
 
+                    //if the new idex goes beyond the scope of the array, find the equivlent that would return the same letter
                     if ($shifted_index < 0) {
                         $shifted_index += 26;
                     } elseif ($shifted_index > 25) {
                         $shifted_index -= 26;
                     }
 
-                    $final_index = ($shifted_index*-1);
+                    // $final_index = ($shifted_index*-1);
                     // var_dump($shifted_index);
 
-                $cipher .= $alphabet[$final_index]);
+                $cipher .= $alphabet[$shifted_index];
             } else {
                 $cipher .=$letter;
-            }
+            };
         };
 
         //store result of logic into session variable
@@ -119,5 +120,5 @@
 
         // $_SESSION['result'];
 
-        return " \" $cipher \" ";
+        return $cipher;
     }
